@@ -14,7 +14,9 @@ const ChatsPage = () => {
   return (
     <div>
       {chats.map((el) => (
-        <div key={el._id}>{el.chatName}</div>
+        <div key={el._id} style={{ color: "white" }}>
+          {el.chatName}
+        </div>
       ))}
     </div>
   );
