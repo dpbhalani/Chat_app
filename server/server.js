@@ -9,7 +9,11 @@ app.get("/", (req, res) => {
   res.send("The API is runing.. ");
 });
 
-app.get("/api/chat/:id", (req, res) => {
+app.get("/api/chats", (req, res) => {
+  res.send(chats);
+});
+
+app.get("/api/chats/:id", (req, res) => {
   const chat = chats.find((el) => el._id === req.params.id);
   res.send(chat);
 });
