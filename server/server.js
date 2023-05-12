@@ -1,8 +1,11 @@
 const express = require("express");
 const dotenv = require("dotenv");
-dotenv.config({ path: "./.env" });
 const chats = require("./data");
+const colors = require("colors");
+const connectDB = require("./config/db");
 
+dotenv.config({ path: "./.env" });
+connectDB();
 const app = express();
 
 app.get("/", (req, res) => {
@@ -19,5 +22,7 @@ app.get("/api/chats/:id", (req, res) => {
 });
 
 app.listen(process.env.PORT, () => {
-  console.log(`The server i listning at port:- ${process.env.PORT}`);
+  console.log(
+    `The server i listning at port:- ${process.env.PORT}`.yellow.bold
+  );
 });
