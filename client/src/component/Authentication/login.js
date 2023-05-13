@@ -2,14 +2,70 @@ import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
+import { useToast } from "@chakra-ui/toast";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const Login = () => {
+  const toast = useToast();
+  const navigate = useNavigate();
+
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [loading, setLoading] = useState(false);
 
-  const submitHandler = async () => {};
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    if (!email || !password) {
+      toast({
+        title: "Please Fill all the Feilds",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      setLoading(false);
+      return;
+    }
+    console.log(email, password);
+    const { data } = fetch("http://localhost:8000/api/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        if (data.status === "Fail") {
+          toast({
+            title: "Error Occured!",
+            description: data.status,
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "top",
+          });
+        } else {
+          toast({
+            title: "Registration Successful",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+            position: "top",
+          });
+        }
+      });
+
+    localStorage.setItem("userInfo", JSON.stringify(data));
+    setLoading(false);
+    navigate("/chats");
+  };
 
   const handleClick = () => {
     setShow(!show);

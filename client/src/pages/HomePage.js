@@ -45,7 +45,7 @@ const HomePage = () => {
       >
         <Tabs isFitted variant="soft-rounded">
           <TabList mb="1em">
-            <Tab width="50%">Login</Tab>
+            <Tab width="50%" >Login</Tab>
             <Tab width="50%">Sign Up</Tab>
           </TabList>
           <TabPanels>
