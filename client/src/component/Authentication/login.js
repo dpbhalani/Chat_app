@@ -102,6 +102,7 @@ const Login = () => {
         width="100%"
         style={{ marginTop: 15 }}
         onClick={submitHandler}
+        isLoading={loading}
       >
         Login
       </Button>
@@ -113,6 +114,7 @@ const Login = () => {
           setEmail("guest@example.com");
           setPassword("123456");
         }}
+        isLoading={loading}
       >
         Get Guest User Credentials
       </Button>
