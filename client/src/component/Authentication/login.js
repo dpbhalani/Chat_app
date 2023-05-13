@@ -30,7 +30,7 @@ const Login = () => {
       return;
     }
     console.log(email, password);
-    const { data } = fetch("http://localhost:8000/api/user/login", {
+    fetch("http://localhost:8000/api/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -38,16 +38,17 @@ const Login = () => {
       body: JSON.stringify({ email, password }),
     })
       .then((res) => {
+        // console.log(res);
         return res.json();
       })
       .then((data) => {
-        console.log(data);
-        if (data.status === "Fail") {
+        //console.log(data.user._id);
+        if (data.user._id === "") {
           toast({
-            title: "Error Occured!",
+            title: "Login failed please try again with correct credential!",
             description: data.status,
             status: "error",
-            duration: 5000,
+            duration: 2000,
             isClosable: true,
             position: "top",
           });
@@ -55,16 +56,18 @@ const Login = () => {
           toast({
             title: "Registration Successful",
             status: "success",
-            duration: 5000,
+            duration: 2000,
             isClosable: true,
             position: "top",
           });
+          navigate("/chats");
         }
       });
 
-    localStorage.setItem("userInfo", JSON.stringify(data));
+    //localStorage.setItem("userInfo", JSON.stringify(data));
     setLoading(false);
-    navigate("/chats");
+    setEmail("");
+    setPassword("");
   };
 
   const handleClick = () => {
@@ -78,6 +81,7 @@ const Login = () => {
         <Input
           type="email"
           placeholder="Enter Your Email Address"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
@@ -87,6 +91,7 @@ const Login = () => {
           <Input
             type={show ? "text" : "password"}
             placeholder="Enter Password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">

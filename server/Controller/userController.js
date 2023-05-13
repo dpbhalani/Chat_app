@@ -51,7 +51,7 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-exports.authUser = asyncHandler(async (req, res) => {
+exports.authUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -63,11 +63,13 @@ exports.authUser = asyncHandler(async (req, res) => {
         token: generateToken(user._id),
       });
     }
-  } catch (err) {
+  } catch(err){
     res.status(400).json({
       status: "Fail",
       message: "Invalid credential",
-      error: err.message,
+      data: {
+        err,
+      },
     });
   }
-});
+};
