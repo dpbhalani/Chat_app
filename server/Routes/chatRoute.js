@@ -6,8 +6,8 @@ const { route } = require("./userRoute");
 const router = express.Router();
 
 router.route("/").post(authController.protect, chatController.accessChat);
-// router.route("/").get(authController.protect, chatController.fetchChat);
-// router.route("/group").post(authController.protect, chatController.createGroup);
+router.route("/").get(authController.protect, chatController.fetchChat);
+router.route("/group").post(authController.protect, chatController.createGroupChat);
 // router.route("/rename").put(authController.protect, chatController.renameGroup);
 // router
 //   .route("/groupRemove")
