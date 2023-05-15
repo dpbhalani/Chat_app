@@ -5,6 +5,7 @@ const ChatsPage = () => {
   const [chats, setChats] = useState([]);
   const fetchData = async () => {
     const data = await fetch("http://localhost:8000/api/chats");
+
     const jsondata = await data.json();
     setChats(jsondata);
     //console.log(data);

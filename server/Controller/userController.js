@@ -3,19 +3,33 @@ const User = require("../model/userModel");
 const generateToken = require("../config/generateToken");
 const { json } = require("express");
 
-// const allUsers = asyncHandler(async (req, res) => {
-//   const keyword = req.query.search
-//     ? {
-//         $or: [
-//           { name: { $regex: req.query.search, $options: "i" } },
-//           { email: { $regex: req.query.search, $options: "i" } },
-//         ],
-//       }
-//     : {};
+exports.allUsers = async (req, res) => {
+  try {
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
 
-//   const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
-//   res.send(users);
-// });
+    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+    res.status(200).json({
+      status: "success",
+      data: {
+        users,
+      },
+    });
+  } catch (err) {
+    res.status(403).json({
+      status: "fail",
+      data: {
+        error: err.message,
+      },
+    });
+  }
+};
 
 exports.registerUser = async (req, res) => {
   try {
@@ -63,7 +77,7 @@ exports.authUser = async (req, res) => {
         token: generateToken(user._id),
       });
     }
-  } catch(err){
+  } catch (err) {
     res.status(400).json({
       status: "Fail",
       message: "Invalid credential",

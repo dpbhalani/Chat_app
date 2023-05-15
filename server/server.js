@@ -5,6 +5,7 @@ const colors = require("colors");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const userRouter = require("./Routes/userRoute");
+const chatRouter = require("./Routes/chatRoute");
 
 dotenv.config({ path: "./.env" });
 connectDB();
@@ -21,6 +22,7 @@ app.get("/api/chats", (req, res) => {
 });
 
 app.use("/api/user", userRouter);
+app.use("/api/chat", chatRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(
