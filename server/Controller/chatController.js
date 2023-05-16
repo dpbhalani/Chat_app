@@ -106,3 +106,92 @@ exports.createGroupChat = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+
+exports.renameGroup = asyncHandler(async (req, res) => {
+  const { chatId, chatName } = req.body;
+
+  const updatedChat = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      chatName: chatName,
+    },
+    {
+      new: true,
+    }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!updatedChat) {
+    res.status(400).json({
+      status: "fail",
+      message: "Chat is not updated",
+    });
+  } else {
+    res.status(200).json({
+      status: "success",
+      message: "chat is updaed successfully...!",
+      data: {
+        updatedChat,
+      },
+    });
+  }
+});
+
+exports.addToGroup = asyncHandler(async (req, res) => {
+  const { chatId, userId } = req.body;
+
+  const added = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $push: { users: userId },
+    },
+    { new: true }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!added) {
+    res.status(400).json({
+      status: "fail",
+      message: "Please add valid user.!",
+    });
+  } else {
+    res.status(200).json({
+      status: "success",
+      message: "user added successfully..!",
+      data: {
+        added,
+      },
+    });
+  }
+});
+
+exports.removeFromGroup = asyncHandler(async (req, res) => {
+  const { chatId, userId } = req.body;
+
+  const removed = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $pull: { users: userId },
+    },
+    { new: true }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!removed) {
+    res.status(400).json({
+      status: "fail",
+      message: "Please add valid user.!",
+    });
+  } else {
+    res.status(200).json({
+      status: "success",
+      message: "user removed successfully..!",
+      data: {
+        removed,
+      },
+    });
+  }
+});
